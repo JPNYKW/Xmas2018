@@ -68,6 +68,19 @@ let snowSet = null;
             marker.add(object);
         });
 
+        // load stone object
+        for (let i = 0; i < 3; i++) {
+            loader = new THREE.GLTFLoader();
+            loader.load('./ar/model/stone.glb', data => {
+                let size = 0.12;
+                let object = data.scene;
+                object.scale.set(size, size, size);
+                object.position.set(-0.1, 0.1, 0.64 + i / 2.6);
+                object.rotation.y = i * 60 * Math.PI / 180;
+                marker.add(object);
+            });
+        }
+
         // load tree object
         [{x: 1.2, y: 0, z: -0.2}, {x: -0.9, y: 0, z: 0.8}].map((pos, index) => {
             let loader = new THREE.GLTFLoader();
