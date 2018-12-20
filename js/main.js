@@ -25,9 +25,14 @@ let snowSet = null;
         const camera = new THREE.Camera();
         scene.add(camera);
 
-        const light = new THREE.DirectionalLight(0xffffff, 4);
-        light.position.set(0, 0, 2);
-        scene.add(light);
+        // const sun = new THREE.DirectionalLight(0xfff4f4, 3.7);
+        const sun = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 1.5);
+        sun.position.set(0, 0, 2);
+        scene.add(sun);
+
+        const pointLight = new THREE.PointLight(0xb8e0ef, 8, 40);
+        pointLight.position.set(0.2, 0.7, 2);
+        scene.add(pointLight);
 
         const source = new THREEx.ArToolkitSource({sourceType: 'webcam'});
         source.init(() => resize());
@@ -80,6 +85,19 @@ let snowSet = null;
                 marker.add(object);
             });
         }
+
+        // load present box
+        [{x: 0.3, y: 0.2, z: 0.7, d: 70}, {x: 0.5, y: 0.2, z: 0.67, d: 120}, {x: 0.4, y: 0.4, z: 0.71, d: 40}].map(param => {
+            loader = new THREE.GLTFLoader();
+            loader.load('./ar/model/presentBox.glb', data => {
+                let size = 0.04;
+                let object = data.scene;
+                object.scale.set(size, size, size);
+                object.position.set(param.x, param.y, param.z);
+                object.rotation.set(0, param.d * Math.PI / 180, 0);
+                marker.add(object);
+            });
+        });
 
         // load tree object
         [{x: 1.2, y: 0, z: -0.2}, {x: -0.9, y: 0, z: 0.8}].map((pos, index) => {
